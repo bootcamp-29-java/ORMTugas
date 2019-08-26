@@ -23,7 +23,7 @@ public class InternalJobView extends javax.swing.JInternalFrame {
     private String[] tabelHeader;
     private List<Job> listJobs;
     private DefaultTableModel dtm;
-    private boolean isInsert;
+    private boolean isSave;
     int row;
 
     /**
@@ -74,6 +74,7 @@ public class InternalJobView extends javax.swing.JInternalFrame {
     }
 
     public void emptyField() {
+        txtJobId.setEditable(true);
         txtJobId.requestFocus();
         txtJobId.setText("");
         txtJobTitle.setText("");
@@ -319,23 +320,14 @@ public class InternalJobView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
-        String status;
-        if (isInsert) {
-            status = jobController.save(txtJobId.getText(), txtJobTitle.getText(), txtMaxSalary.getText(), txtMinSalary.getText());
+      
+            String status = jobController.save(txtJobId.getText(), txtJobTitle.getText(), txtMaxSalary.getText(), txtMinSalary.getText());
             if (status == "Data Berhasil Disimpan") {
                 JOptionPane.showMessageDialog(null, "Job Berhasil Disimpan");
             } else {
                 JOptionPane.showMessageDialog(null, "Job Gagal Disimpan");
             }
-        } else {
-            refreshTable(" ");
-            status = jobController.save(txtJobId.getText(), txtJobTitle.getText(), txtMaxSalary.getText(), txtMinSalary.getText());
-            if (status == "Data Berhasil Disimpan") {
-                JOptionPane.showMessageDialog(null, "Job Berhasil Diupdate");
-            } else {
-                JOptionPane.showMessageDialog(null, "Job Gagal Diupdate");
-            }
-        }
+        
         refreshTable(" ");
     }//GEN-LAST:event_btnInsertActionPerformed
 
@@ -353,7 +345,7 @@ public class InternalJobView extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        refreshTable("Index");
+        emptyField();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
 
