@@ -28,7 +28,7 @@ public class CountryDAO implements ICountryDAO {
         try {
             session = factory.openSession();
             transaction = session.beginTransaction();
-            Query q = session.createQuery("FROM Country WHERE Id =:id");
+            Query q = session.createQuery("FROM Country WHERE id =:id");
             q.setParameter("id", id);
             c = (Country) q.uniqueResult();
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class CountryDAO implements ICountryDAO {
         try {
             session = factory.openSession();
             transaction = session.beginTransaction();
-            Query q = session.createQuery("FROM Country WHERE Name LIKE :key OR Id LIKE :key ORDER BY Id ASC");
+            Query q = session.createQuery("FROM Country WHERE name LIKE :key OR id LIKE :key ORDER BY id ASC");
             q.setParameter("key", "%" + key + "%");
             c = q.list();
         } catch (Exception e) {
