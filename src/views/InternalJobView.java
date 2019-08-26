@@ -17,8 +17,7 @@ import tools.HibernateUtil;
  *
  * @author Lenovo
  */
-public class JobView extends javax.swing.JFrame {
-
+public class InternalJobView extends javax.swing.JInternalFrame {
     private JobController jobController;
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private String[] tabelHeader;
@@ -28,9 +27,9 @@ public class JobView extends javax.swing.JFrame {
     int row;
 
     /**
-     * Creates new form JobView
+     * Creates new form InternalJobView
      */
-    public JobView() {
+    public InternalJobView() {
         initComponents();
         jobController = new JobController(factory);
         tabelHeader = new String[]{"NO", "JOB ID", "JOB TITLE", "MIN SALARY", "MAX SALARY"};
@@ -40,8 +39,8 @@ public class JobView extends javax.swing.JFrame {
         btnInsert.setEnabled(false);
         btnCancel.setEnabled(false);
     }
-
-    private void refreshTable(String key) {
+    
+     private void refreshTable(String key) {
         if (key == "search") {
             listJobs = jobController.search(txtSearch.getText());
         } else {
@@ -92,26 +91,23 @@ public class JobView extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        txtJobId = new javax.swing.JTextField();
-        txtJobTitle = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtMinSalary = new javax.swing.JTextField();
-        txtMaxSalary = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        btnInsert = new javax.swing.JButton();
-        btnUpdate = new javax.swing.JButton();
+        txtMaxSalary = new javax.swing.JTextField();
+        txtMinSalary = new javax.swing.JTextField();
+        txtJobTitle = new javax.swing.JTextField();
+        txtJobId = new javax.swing.JTextField();
+        buttonAdd = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnInsert = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblJob = new javax.swing.JTable();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
-        buttonAdd = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(11, 184, 170));
 
         jLabel1.setText("JOB ID");
 
@@ -119,11 +115,7 @@ public class JobView extends javax.swing.JFrame {
 
         jLabel3.setText("MIN SALARY");
 
-        txtMinSalary.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtMinSalaryActionPerformed(evt);
-            }
-        });
+        jLabel4.setText("MAX SALARY");
 
         txtMaxSalary.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -131,12 +123,30 @@ public class JobView extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setText("MAX SALARY");
-
-        btnInsert.setText("SAVE");
-        btnInsert.addActionListener(new java.awt.event.ActionListener() {
+        txtMinSalary.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInsertActionPerformed(evt);
+                txtMinSalaryActionPerformed(evt);
+            }
+        });
+
+        buttonAdd.setText("ADD");
+        buttonAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonAddActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setText("CANCEL");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setText("DELETE");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -147,10 +157,10 @@ public class JobView extends javax.swing.JFrame {
             }
         });
 
-        btnDelete.setText("DELETE");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+        btnInsert.setText("SAVE");
+        btnInsert.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
+                btnInsertActionPerformed(evt);
             }
         });
 
@@ -183,20 +193,6 @@ public class JobView extends javax.swing.JFrame {
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRefreshActionPerformed(evt);
-            }
-        });
-
-        buttonAdd.setText("ADD");
-        buttonAdd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonAddActionPerformed(evt);
-            }
-        });
-
-        btnCancel.setText("CANCEL");
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
             }
         });
 
@@ -274,7 +270,7 @@ public class JobView extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
                             .addComponent(txtMaxSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 124, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(buttonAdd)
                             .addComponent(btnCancel))
@@ -289,69 +285,13 @@ public class JobView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtMinSalaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMinSalaryActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMinSalaryActionPerformed
-
     private void txtMaxSalaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaxSalaryActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMaxSalaryActionPerformed
 
-    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
-       String status;
-        if (isInsert) {
-             status = jobController.save(txtJobId.getText(), txtJobTitle.getText(), txtMaxSalary.getText(), txtMinSalary.getText());
-            if (status == "Data Berhasil Disimpan") {
-                JOptionPane.showMessageDialog(null, "Job Berhasil Disimpan");
-            } else {
-                JOptionPane.showMessageDialog(null, "Job Gagal Disimpan");
-            }
-        } else {
-            refreshTable(" ");
-            status = jobController.save(txtJobId.getText(), txtJobTitle.getText(), txtMaxSalary.getText(), txtMinSalary.getText());
-            if (status == "Data Berhasil Disimpan") {
-                JOptionPane.showMessageDialog(null, "Job Berhasil Diupdate");
-            } else {
-                JOptionPane.showMessageDialog(null, "Job Gagal Diupdate");
-            }
-        }
-        refreshTable(" ");
-
-    }//GEN-LAST:event_btnInsertActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        isInsert = false;
-        txtJobId.setEnabled(false);
-        txtJobTitle.requestFocus();
-        btnCancel.setEnabled(true);
-        btnRefresh.setEnabled(false);
-        btnDelete.setEnabled(false);
-        btnUpdate.setEnabled(false);
-        buttonAdd.setEnabled(false);
-        btnSearch.setEnabled(false);
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-//        String status = );
-        if (jobController.delete(txtJobId.getText()) == "Data Baerhasil Dihapus") {
-            JOptionPane.showMessageDialog(null, "Job Berhasil Dihapus");
-        } else {
-            JOptionPane.showMessageDialog(null, "Job Gagal Dihapus");
-        }
-        refreshTable(" ");
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void tblJobMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblJobMouseClicked
-        setText();
-    }//GEN-LAST:event_tblJobMouseClicked
-
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        refreshTable("search");
-    }//GEN-LAST:event_btnSearchActionPerformed
-
-    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        refreshTable("Index");
-    }//GEN-LAST:event_btnRefreshActionPerformed
+    private void txtMinSalaryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMinSalaryActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtMinSalaryActionPerformed
 
     private void buttonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAddActionPerformed
         isInsert = true;
@@ -374,41 +314,61 @@ public class JobView extends javax.swing.JFrame {
         refreshTable("");
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JobView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JobView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JobView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JobView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        //        String status = );
+        if (jobController.delete(txtJobId.getText()) == "Data Baerhasil Dihapus") {
+            JOptionPane.showMessageDialog(null, "Job Berhasil Dihapus");
+        } else {
+            JOptionPane.showMessageDialog(null, "Job Gagal Dihapus");
         }
-        //</editor-fold>
-        //</editor-fold>
+        refreshTable(" ");
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new JobView().setVisible(true);
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        isInsert = false;
+        txtJobId.setEnabled(false);
+        txtJobTitle.requestFocus();
+        btnCancel.setEnabled(true);
+        btnRefresh.setEnabled(false);
+        btnDelete.setEnabled(false);
+        btnUpdate.setEnabled(false);
+        buttonAdd.setEnabled(false);
+        btnSearch.setEnabled(false);
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+        String status;
+        if (isInsert) {
+            status = jobController.save(txtJobId.getText(), txtJobTitle.getText(), txtMaxSalary.getText(), txtMinSalary.getText());
+            if (status == "Data Berhasil Disimpan") {
+                JOptionPane.showMessageDialog(null, "Job Berhasil Disimpan");
+            } else {
+                JOptionPane.showMessageDialog(null, "Job Gagal Disimpan");
             }
-        });
-    }
+        } else {
+            refreshTable(" ");
+            status = jobController.save(txtJobId.getText(), txtJobTitle.getText(), txtMaxSalary.getText(), txtMinSalary.getText());
+            if (status == "Data Berhasil Disimpan") {
+                JOptionPane.showMessageDialog(null, "Job Berhasil Diupdate");
+            } else {
+                JOptionPane.showMessageDialog(null, "Job Gagal Diupdate");
+            }
+        }
+        refreshTable(" ");
+    }//GEN-LAST:event_btnInsertActionPerformed
+
+    private void tblJobMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblJobMouseClicked
+        setText();
+    }//GEN-LAST:event_tblJobMouseClicked
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        refreshTable("search");
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        refreshTable("Index");
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

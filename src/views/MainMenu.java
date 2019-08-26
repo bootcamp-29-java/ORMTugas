@@ -241,13 +241,13 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-      if (cek_status()==true) {
+//      if (cek_status()==true) {
         iPanel.removeAll();
       iPanel.updateUI();
-        JobView view = new JobView();
+        InternalJobView view = new InternalJobView();
        view.setVisible(true);
        iPanel.add(view);
-      }
+//      }
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
