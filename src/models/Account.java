@@ -45,13 +45,14 @@ public class Account implements Serializable {
     @JoinColumn(name = "EMPLOYEE_ID", referencedColumnName = "EMPLOYEE_ID", insertable = false, updatable = false)
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     private Employee employee;
+    private static String Uname;
 
-    public static String getUname() {
-        return uname;
+    public String getUname() {
+        return Uname;
     }
 
-    public static void setUname(String uname) {
-        Account.uname = uname;
+    public void setUname(String uname) {
+        this.Uname = uname;
     }
     private static String uname;
 

@@ -90,7 +90,7 @@ public class CountryDAO implements ICountryDAO {
     public List<Country> searchRegionId() {
         List<Country> listRegion = new ArrayList<>();
         String query = null;
-        query = "SELECT Id FROM Region";
+        query = "SELECT id FROM Region";
         try {
             session = factory.openSession();
             transaction = session.beginTransaction();

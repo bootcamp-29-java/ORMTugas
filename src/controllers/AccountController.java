@@ -32,7 +32,7 @@ public class AccountController implements IAccountController{
         if(iadao.login(username, pass)){
             result = "Login Berhasil";
             Account acc = new Account();
-            acc.setUsername(username);
+            acc.setUname(username);
         }else{
             result = "Maaf data gagal dikenali";
         }
