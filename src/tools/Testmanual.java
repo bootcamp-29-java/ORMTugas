@@ -6,8 +6,10 @@
 package tools;
 
 import daos.AccountDAO;
+import daos.DepartmentDAO;
 import daos.RegionDAO;
 import models.Account;
+import models.Department;
 import models.Region;
 import org.hibernate.SessionFactory;
 
@@ -17,32 +19,15 @@ import org.hibernate.SessionFactory;
  */
 public class Testmanual {
     public static void main(String[] args) {
-         SessionFactory factory = HibernateUtil.getSessionFactory();
+        SessionFactory factory = HibernateUtil.getSessionFactory();
         System.out.println(HibernateUtil.getSessionFactory());
         
-        RegionDAO Rdao = new RegionDAO(factory);
-        AccountDAO Adao = new AccountDAO(factory);
-        
-        ///tes login
-        //Account acc = new Account(102, "Lex", "Reza");
-//       System.out.println(Adao.login("Lex", "Reza"));
-//        
-//        for(Account acc1 : Adao.getAll()){
-//            System.out.println("Account -> "+acc1.getEmployeeId() +" - "+acc1.getUsername());
-//            
-//        }
-        
-        //tes regis
-//        Account acc = new Account(102, "Lexi", "Reza");
-//        System.out.println(Adao.register(acc));
-        
-        ///tes region
-//        for(Region reg : Rdao.getAll()){
-//            System.out.println("Region -> "+reg.getId() +" - "+reg.getCountrieList());
-//            
-//        }
-//        for(Region region : Rdao.search("8")){
-//         System.out.println(region.getName());
-//        }
+        DepartmentDAO ddao = new DepartmentDAO(factory);
+//        Department department = ddao.getByID(Short.parseShort("310"));
+//        System.out.println(department.getId()+" - "+department.getName());
+        Department department = new Department();
+        department.setId(Short.parseShort("320"));
+        department.setName("WowWoWoW");
+        System.out.println(ddao.saveOrDelete(department,true));
     }
 }

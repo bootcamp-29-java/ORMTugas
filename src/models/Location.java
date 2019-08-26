@@ -59,6 +59,15 @@ public class Location implements Serializable {
 
     public Location() {
     }
+    
+    public Location(Short id) {
+        this.id = id;
+    }
+
+    public Location(Short id, String city) {
+        this.id = id;
+        this.city = city;
+    }
 
     public Short getId() {
         return id;
@@ -67,7 +76,6 @@ public class Location implements Serializable {
     public void setId(Short id) {
         this.id = id;
     }
-
     
     public String getStreetAddress() {
         return streetAddress;
