@@ -15,7 +15,6 @@ import models.Employee;
  */
 public interface IEmployeeDAO {
     public List<Employee> search(String key);
-    public List<Employee> searchID(int key);
     public List<Employee> searchSalary(BigDecimal key);
     public Employee getById(int id);
     public boolean saveOrDelete(Employee employee, boolean isSave);

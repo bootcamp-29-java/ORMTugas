@@ -83,11 +83,6 @@ public class EmployeeController implements IEmployeeController{
     }
 
     @Override
-    public List<Employee> searchID(int key) {
-        return iedao.searchID(key);
-    }
-
-    @Override
     public List<Employee> searchSalary(String key) {
         BigDecimal bd = new BigDecimal(key);
         return iedao.searchSalary(bd);

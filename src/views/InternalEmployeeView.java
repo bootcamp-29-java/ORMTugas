@@ -5,7 +5,9 @@
  */
 package views;
 
+import controllers.DepartmentController;
 import controllers.EmployeeController;
+import controllers.JobController;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import models.Department;
@@ -37,6 +41,10 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
     SessionFactory factory = HibernateUtil.getSessionFactory();
     Session session;
     Transaction transaction;
+    List<Job> listJob;
+    JobController cJob = new JobController(factory);
+    List<Department> listDepartment;
+    DepartmentController cDepartment = new DepartmentController(factory);
 
     /**
      * Creates new form InternalEmployeeView
@@ -46,7 +54,7 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         initComponents();
         controller = new EmployeeController(factory);
         tabelHeader = new String[]{
-            "No", "ID", "First Name", "Last Name", "Emali", "Phone", "Hire Date", "Job ID", "Salary", "Commision", "Manager ID", "Department ID"
+            "No", "ID", "First Name", "Last Name", "Emali", "Phone", "Hire Date", "Job ID", "Salary", "Commision", "Manager", "Department"
         };
         dtm = new DefaultTableModel(null, tabelHeader);
         tabelData.setModel(dtm);
@@ -54,7 +62,6 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         HireDate.setDate(new Date());
         refreshTabel();
         tampilCombo();
-        inputanTambahMati();
     }
 
     /**
@@ -85,10 +92,8 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        tombolTambah = new javax.swing.JButton();
         tombolSimpanTambah = new javax.swing.JButton();
         resetTambah = new javax.swing.JButton();
-        batalTambah = new javax.swing.JButton();
         txtFirstName = new javax.swing.JTextField();
         txtId = new javax.swing.JTextField();
         txtLastName = new javax.swing.JTextField();
@@ -99,7 +104,6 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         comboJobId = new javax.swing.JComboBox<>();
         comboManagerId = new javax.swing.JComboBox<>();
         comboDepartmentId = new javax.swing.JComboBox<>();
-        tombolEdit = new javax.swing.JButton();
         tombolHapus = new javax.swing.JButton();
         HireDate = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -142,7 +146,7 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(18, 18, 18)
-                                .addComponent(kriteriaCari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(kriteriaCari, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtCari, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(89, 89, 89)
@@ -164,7 +168,7 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tombolCari)
                     .addComponent(tombolReset))
-                .addContainerGap(343, Short.MAX_VALUE))
+                .addContainerGap(334, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Utama", jPanel1);
@@ -202,14 +206,6 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel13.setText("Deparment ID");
 
-        tombolTambah.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        tombolTambah.setText("Tambah");
-        tombolTambah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tombolTambahActionPerformed(evt);
-            }
-        });
-
         tombolSimpanTambah.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tombolSimpanTambah.setText("Simpan");
         tombolSimpanTambah.addActionListener(new java.awt.event.ActionListener() {
@@ -223,14 +219,6 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         resetTambah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 resetTambahActionPerformed(evt);
-            }
-        });
-
-        batalTambah.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        batalTambah.setText("Batal");
-        batalTambah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                batalTambahActionPerformed(evt);
             }
         });
 
@@ -258,24 +246,16 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
 
         txtCommision.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
-        comboJobId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih ID -" }));
+        comboJobId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Job -" }));
         comboJobId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboJobIdActionPerformed(evt);
             }
         });
 
-        comboManagerId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih ID -", "0" }));
+        comboManagerId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Manager -", "0" }));
 
-        comboDepartmentId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih ID -", "0" }));
-
-        tombolEdit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        tombolEdit.setText("Edit");
-        tombolEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tombolEditActionPerformed(evt);
-            }
-        });
+        comboDepartmentId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Department -", "0" }));
 
         tombolHapus.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tombolHapus.setText("Hapus Data");
@@ -290,65 +270,55 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
+                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(tombolTambah)
-                        .addGap(18, 18, 18)
-                        .addComponent(tombolEdit)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                    .addComponent(jLabel9)
+                    .addComponent(comboJobId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel10)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel3)
                                 .addComponent(jLabel4)
                                 .addComponent(jLabel5)
                                 .addComponent(jLabel6)
                                 .addComponent(jLabel7)
-                                .addComponent(jLabel10)
-                                .addComponent(jLabel11)
-                                .addComponent(jLabel8)
-                                .addComponent(jLabel9)
-                                .addComponent(jLabel12))
-                            .addGap(15, 15, Short.MAX_VALUE)
+                                .addComponent(jLabel8))
+                            .addGap(20, 20, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                                .addComponent(txtId)
                                 .addComponent(txtFirstName)
                                 .addComponent(txtLastName)
                                 .addComponent(txtEmail)
                                 .addComponent(txtPhone)
-                                .addComponent(txtSalary)
-                                .addComponent(txtCommision)
-                                .addComponent(comboJobId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(HireDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(comboManagerId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(jLabel13)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(comboDepartmentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGap(0, 79, Short.MAX_VALUE)))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(48, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(batalTambah)
+                                .addComponent(HireDate, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel13)
+                            .addGap(0, 0, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(tombolSimpanTambah)
+                        .addComponent(jLabel11)
                         .addGap(18, 18, 18)
-                        .addComponent(resetTambah)
-                        .addGap(18, 18, 18)
-                        .addComponent(tombolHapus)))
+                        .addComponent(txtCommision, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel12)
+                    .addComponent(comboManagerId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboDepartmentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(86, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addComponent(tombolSimpanTambah)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addComponent(resetTambah)
+                .addGap(35, 35, 35)
+                .addComponent(tombolHapus)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tombolTambah)
-                    .addComponent(tombolEdit))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
@@ -373,33 +343,31 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
                     .addComponent(jLabel8)
                     .addComponent(HireDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(comboJobId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comboJobId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel10)
+                    .addComponent(txtSalary, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtCommision, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
+                .addGap(30, 30, 30)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comboManagerId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(comboManagerId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(comboDepartmentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comboDepartmentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tombolSimpanTambah)
-                    .addComponent(resetTambah)
-                    .addComponent(tombolHapus))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addComponent(batalTambah)
-                .addContainerGap())
+                    .addComponent(tombolHapus)
+                    .addComponent(resetTambah))
+                .addGap(26, 26, 26))
         );
 
         jTabbedPane1.addTab("Kelola Data", jPanel2);
@@ -454,14 +422,6 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         txtCari.setText("");
     }//GEN-LAST:event_tombolResetActionPerformed
 
-    private void tombolTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolTambahActionPerformed
-        txtId.requestFocus();
-        reset_tambah();
-        inputanTambahHidup();
-        tombolHapus.setEnabled(false);
-        tombolEdit.setEnabled(false);
-    }//GEN-LAST:event_tombolTambahActionPerformed
-
     private void tombolSimpanTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolSimpanTambahActionPerformed
         String id = txtId.getText();
         String first = txtFirstName.getText();
@@ -473,6 +433,9 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         String date = formatDB.format(HireDate.getDate());
 
         String job = (String) comboJobId.getSelectedItem();
+//        String job = ambilIdRelasi((String) comboJobId.getSelectedItem());
+        System.out.println(job);
+        
         String salary = txtSalary.getText();
         String commision;
         if (txtCommision.getText().isEmpty()) {
@@ -481,32 +444,30 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
             commision = txtCommision.getText();
         }
 
-        String employeeId = (String) comboManagerId.getSelectedItem();
-        String departmentId = (String) comboDepartmentId.getSelectedItem();
+//        String employeeId = (String) comboManagerId.getSelectedItem();
+        String employeeId = ambilIdRelasi((String) comboManagerId.getSelectedItem());
+        System.out.println(employeeId);
+        
+//        String departmentId = (String) comboDepartmentId.getSelectedItem();
+        String departmentId = ambilIdRelasi((String) comboDepartmentId.getSelectedItem());
+        System.out.println(departmentId);
+        
         try {
             JOptionPane.showMessageDialog(this, controller.save(id, first, last, mail, phone, date, job, salary, commision, employeeId, departmentId));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Tidak Boleh Ada Field yang Kosong !");
         }
 
-        inputanTambahMati();
-        tombolEdit.setEnabled(true);
-        tombolTambah.setEnabled(true);
         reset_tambah();
-        inputanTambahMati();
         refreshTabel();
+        txtId.setEnabled(true);
     }//GEN-LAST:event_tombolSimpanTambahActionPerformed
 
     private void resetTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetTambahActionPerformed
         reset_tambah();
+        txtId.setEnabled(true);
         txtId.requestFocus();
     }//GEN-LAST:event_resetTambahActionPerformed
-
-    private void batalTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_batalTambahActionPerformed
-        inputanTambahMati();
-        tombolEdit.setEnabled(true);
-        tombolTambah.setEnabled(true);
-    }//GEN-LAST:event_batalTambahActionPerformed
 
     private void txtFirstNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFirstNameFocusLost
         // TODO add your handling code here:
@@ -531,15 +492,6 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboJobIdActionPerformed
 
-    private void tombolEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolEditActionPerformed
-        tombolTambah.setEnabled(false);
-        inputanTambahHidup();
-        txtId.setEnabled(false);
-        txtFirstName.requestFocus();
-        tombolHapus.setEnabled(true);
-        resetTambah.setEnabled(false);
-    }//GEN-LAST:event_tombolEditActionPerformed
-
     private void tombolHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolHapusActionPerformed
         int jawab = JOptionPane.showOptionDialog(this, "Yakin ingin menghapus data?", "Hapus Data", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
@@ -547,27 +499,24 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
 
             String id = txtId.getText();
             JOptionPane.showMessageDialog(this, controller.delete(id));
-            inputanTambahMati();
-            tombolEdit.setEnabled(true);
-            tombolTambah.setEnabled(true);
             reset_tambah();
-            inputanTambahMati();
             refreshTabel();
         }
+        txtId.setEnabled(true);
     }//GEN-LAST:event_tombolHapusActionPerformed
 
     private void tabelDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelDataMouseClicked
         try {
             setField();
+            txtId.setEnabled(false);
         } catch (ParseException ex) {
-            Logger.getLogger(EmployeeView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(InternalEmployeeView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tabelDataMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser HireDate;
-    private javax.swing.JButton batalTambah;
     private javax.swing.JComboBox<String> comboDepartmentId;
     private javax.swing.JComboBox<String> comboJobId;
     private javax.swing.JComboBox<String> comboManagerId;
@@ -591,11 +540,9 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
     private javax.swing.JButton resetTambah;
     private javax.swing.JTable tabelData;
     private javax.swing.JButton tombolCari;
-    private javax.swing.JButton tombolEdit;
     private javax.swing.JButton tombolHapus;
     private javax.swing.JButton tombolReset;
     private javax.swing.JButton tombolSimpanTambah;
-    private javax.swing.JButton tombolTambah;
     private javax.swing.JTextField txtCari;
     private javax.swing.JTextField txtCommision;
     private javax.swing.JTextField txtEmail;
@@ -632,8 +579,8 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
                 employee.getJob().getId(),
                 employee.getSalary(),
                 employee.getCommissionPct(),
-                employee.getManager().getId(),
-                employee.getDepartment().getId()
+                "< " + employee.getManager().getId() + " > " + employee.getManager().getFirstName(),
+                "< " + employee.getDepartment().getId() + " > " + employee.getDepartment().getName()
             });
         }
         if (tabelData.getRowCount() > 0) {
@@ -715,20 +662,21 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
     }
 
     private void tampilCombo() {
-        controller.searchID(1);
-        listEmployee = controller.searchID(1);
-        for (Object data : listEmployee.toArray()) {
-            comboJobId.addItem(data.toString());
+        listJob = cJob.search("");
+        for (Job data : listJob) {
+//            comboJobId.addItem("< " + data.getId().toString() + " > " + data.getTittle());
+            comboJobId.addItem(data.getId().toString());
         }
-        controller.searchID(2);
-        listEmployee = controller.searchID(2);
-        for (Object data : listEmployee.toArray()) {
-            comboManagerId.addItem(data.toString());
+
+        for (Employee data : listEmployee) {
+            comboManagerId.addItem("< " + data.getId().toString() + " > " + data.getFirstName());
+//            comboManagerId.addItem(data.getFirstName().toString());
         }
-        controller.searchID(3);
-        listEmployee = controller.searchID(3);
-        for (Object data : listEmployee.toArray()) {
-            comboDepartmentId.addItem(data.toString());
+
+        listDepartment = cDepartment.search("");
+        for (Department data : listDepartment) {
+            comboDepartmentId.addItem("< " + data.getId().toString() + " > " + data.getName());
+//            comboDepartmentId.addItem(data.getName().toString());
         }
     }
 
@@ -746,41 +694,6 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         comboDepartmentId.setSelectedIndex(0);
     }
 
-    private void inputanTambahMati() {
-        txtId.setEnabled(false);
-        txtFirstName.setEnabled(false);
-        txtLastName.setEnabled(false);
-        txtEmail.setEnabled(false);
-        txtPhone.setEnabled(false);
-        HireDate.setEnabled(false);
-        comboJobId.setEnabled(false);
-        txtSalary.setEnabled(false);
-        txtCommision.setEnabled(false);
-        comboManagerId.setEnabled(false);
-        comboDepartmentId.setEnabled(false);
-        tombolSimpanTambah.setEnabled(false);
-        resetTambah.setEnabled(false);
-        batalTambah.setEnabled(false);
-        tombolHapus.setEnabled(false);
-    }
-
-    private void inputanTambahHidup() {
-        txtId.setEnabled(true);
-        txtFirstName.setEnabled(true);
-        txtLastName.setEnabled(true);
-        txtEmail.setEnabled(true);
-        txtPhone.setEnabled(true);
-        HireDate.setEnabled(true);
-        comboJobId.setEnabled(true);
-        txtSalary.setEnabled(true);
-        txtCommision.setEnabled(true);
-        comboManagerId.setEnabled(true);
-        comboDepartmentId.setEnabled(true);
-        tombolSimpanTambah.setEnabled(true);
-        resetTambah.setEnabled(true);
-        batalTambah.setEnabled(true);
-    }
-
     private void setField() throws ParseException {
         row = tabelData.getSelectedRow();
         txtId.setText(tabelData.getValueAt(row, 1).toString());
@@ -793,6 +706,7 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         HireDate.setDate((Date) tabelData.getValueAt(row, 6));
 
         comboJobId.setSelectedItem(tabelData.getValueAt(row, 7));
+
         txtSalary.setText(tabelData.getValueAt(row, 8).toString());
 
         String commision = (tabelData.getValueAt(row, 9) != null) ? (tabelData.getValueAt(row, 9).toString()) : "";
@@ -803,5 +717,14 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
 
         String departmentId = (tabelData.getValueAt(row, 11) != "0") ? (tabelData.getValueAt(row, 11).toString()) : "0";
         comboDepartmentId.setSelectedItem(departmentId);
+    }
+    
+    private String ambilIdRelasi(String kalimat){
+        String id = kalimat;
+        Pattern p = Pattern.compile("< (.+?) >", Pattern.DOTALL);
+        Matcher m = p.matcher(id);
+        m.find();
+        String hasil = m.group(1);
+        return hasil;
     }
 }

@@ -101,32 +101,6 @@ public class EmployeeDAO implements IEmployeeDAO {
     }
 
     @Override
-    public List<Employee> searchID(int key) {
-        List<Employee> listEmployee = new ArrayList<>();
-        String query = null;
-        if (key == 1) {
-            query = "SELECT id FROM Job";
-        } else if (key == 2) {
-            query = "SELECT id FROM Employee";
-        } else if (key == 3) {
-            query = "SELECT id FROM Department";
-        }
-        try {
-            session = factory.openSession();
-            transaction = session.beginTransaction();
-            listEmployee = session.createQuery(query).list();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            session.close();
-        }
-        return listEmployee;
-    }
-
-    @Override
     public List<Employee> searchSalary(BigDecimal key) {
         List<Employee> listEmployee = new ArrayList<>();
         try {
