@@ -6,7 +6,7 @@
 package views;
 
 import controllers.AccountController;
-//import controllers.EmployeeController;
+import controllers.EmployeeController;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -23,7 +23,7 @@ import tools.HibernateUtil;
  */
 public class RegisterView extends javax.swing.JFrame {
 
-//    private EmployeeController controller;
+    private EmployeeController controller;
     private AccountController accountController;
     private SessionFactory factory = HibernateUtil.getSessionFactory();
     private String[] tabelHeader;
@@ -37,45 +37,45 @@ public class RegisterView extends javax.swing.JFrame {
      */
     public RegisterView() {
         initComponents();
-//        controller = new EmployeeController(factory);
+        controller = new EmployeeController(factory);
         accountController = new AccountController(factory);
         tabelHeader = new String[]{"No", "Employee ID", "First Name", "Last Name", "Email", "No Telp",
             "Hire Date", "Job ID"
         };
         dtm = new DefaultTableModel(null, tabelHeader);
         tabelEmployee.setModel(dtm);
-//        refreshTabel("Index");
+        refreshTabel("Index");
         textEmployeeID.setRequestFocusEnabled(false);
     }
 
-//    private void refreshTabel(String key) {
-//        if (key == "Index") {
-//            listEmployee = controller.search("");
-//        } else {
-//            listEmployee = controller.search(textSearch.getText());
-//        }
-//        dtm = (DefaultTableModel) tabelEmployee.getModel();
-//        dtm.setRowCount(0);
-//        int no = 1;
-//        for (Employee employee : listEmployee) {
-//            dtm.addRow(new Object[]{
-//                no,
-//                employee.getId(),
-//                employee.getFirstName(),
-//                employee.getLastName(),
-//                employee.getEmail(),
-//                employee.getPhoneNumber(),
-//                employee.getHireDate(),
-//                employee.getJob().getTittle()
-//            });
-//            no = no + 1;
-//        }
-//        if (tabelEmployee.getRowCount() > 0) {
-//            row = tabelEmployee.getRowCount() - 1;
-//            tabelEmployee.setRowSelectionInterval(row, row);
-//        }
-//
-//    }
+    private void refreshTabel(String key) {
+        if (key == "Index") {
+            listEmployee = controller.search("");
+        } else {
+            listEmployee = controller.search(textSearch.getText());
+        }
+        dtm = (DefaultTableModel) tabelEmployee.getModel();
+        dtm.setRowCount(0);
+        int no = 1;
+        for (Employee employee : listEmployee) {
+            dtm.addRow(new Object[]{
+                no,
+                employee.getId(),
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getEmail(),
+                employee.getPhoneNumber(),
+                employee.getHireDate(),
+                employee.getJob().getTittle()
+            });
+            no = no + 1;
+        }
+        if (tabelEmployee.getRowCount() > 0) {
+            row = tabelEmployee.getRowCount() - 1;
+            tabelEmployee.setRowSelectionInterval(row, row);
+        }
+
+    }
     
     private void validasiRegister(String password) {
         if (!password.matches("^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9]+$")) {
@@ -86,9 +86,9 @@ public class RegisterView extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Pendaftaran Berhasil");
                 Account acc = new Account();
                 acc.setUname(textUsername.getText());
-//                MainMenu main = new MainMenu();
-//                main.setVisible(true);
-//                this.dispose();
+                MainMenu main = new MainMenu();
+                main.setVisible(true);
+                this.dispose();
             }else{
                 JOptionPane.showMessageDialog(this, "Pendaftaran Gagal");
             }
@@ -114,7 +114,6 @@ public class RegisterView extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -219,8 +218,6 @@ public class RegisterView extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(11, 184, 170));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/note.png"))); // NOI18N
-
         jLabel1.setFont(new java.awt.Font("Calibri", 1, 24)); // NOI18N
         jLabel1.setText("HALAMAN REGISTER");
 
@@ -238,24 +235,17 @@ public class RegisterView extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(98, 98, 98))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(jLabel1)
-                .addGap(57, 57, 57)
-                .addComponent(jLabel2)
-                .addGap(40, 40, 40)
+                .addGap(97, 97, 97)
                 .addComponent(jLabel3)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -464,7 +454,7 @@ public class RegisterView extends javax.swing.JFrame {
     }//GEN-LAST:event_textSearchKeyPressed
 
     private void textSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textSearchKeyTyped
-//        refreshTabel("search");
+        refreshTabel("search");
     }//GEN-LAST:event_textSearchKeyTyped
 
     private void tabelEmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelEmployeeMouseClicked
@@ -545,7 +535,6 @@ public class RegisterView extends javax.swing.JFrame {
     private javax.swing.JLabel buttonSearch;
     private javax.swing.JDialog dialogEmployee;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

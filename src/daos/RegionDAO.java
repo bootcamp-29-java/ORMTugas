@@ -58,7 +58,7 @@ public class RegionDAO implements IRegionDAO{
         try {
             session = factory.openSession();
             transaction = session.beginTransaction();
-            Query querry = session.createQuery("from Region where Id =:id");
+            Query querry = session.createQuery("from Region where id =:id");
             querry.setParameter("id", id);
             r = (Region) querry.uniqueResult();
         } catch (Exception e) {
@@ -80,7 +80,7 @@ public class RegionDAO implements IRegionDAO{
         try {
             session = factory.openSession();
             transaction = session.beginTransaction();
-            Query querry = session.createQuery("FROM Region WHERE Name LIKE :key or Id like :key");
+            Query querry = session.createQuery("FROM Region WHERE name LIKE :key or id like :key");
             querry.setParameter("key","%"+key+"%");
             region = querry.list();
         } catch (Exception e) {
