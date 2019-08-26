@@ -51,7 +51,6 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
      */
     public InternalEmployeeView() {
         initComponents();
-        initComponents();
         controller = new EmployeeController(factory);
         tabelHeader = new String[]{
             "No", "ID", "First Name", "Last Name", "Emali", "Phone", "Hire Date", "Job ID", "Salary", "Commision", "Manager", "Department"
@@ -80,6 +79,7 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         tombolCari = new javax.swing.JButton();
         tombolReset = new javax.swing.JButton();
         kriteriaCari = new javax.swing.JComboBox<>();
+        fullTabel = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -134,6 +134,14 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
 
         kriteriaCari.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default", "ID" }));
 
+        fullTabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        fullTabel.setText("Lihat Full Tabel");
+        fullTabel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fullTabelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -152,7 +160,10 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
                         .addGap(89, 89, 89)
                         .addComponent(tombolCari)
                         .addGap(18, 18, 18)
-                        .addComponent(tombolReset)))
+                        .addComponent(tombolReset))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(97, 97, 97)
+                        .addComponent(fullTabel)))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -168,7 +179,9 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tombolCari)
                     .addComponent(tombolReset))
-                .addContainerGap(334, Short.MAX_VALUE))
+                .addGap(133, 133, 133)
+                .addComponent(fullTabel)
+                .addContainerGap(182, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Utama", jPanel1);
@@ -514,12 +527,19 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_tabelDataMouseClicked
 
+    private void fullTabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fullTabelActionPerformed
+        EmployeeTabelFul full = new EmployeeTabelFul();
+        full.setVisible(true);
+//        this.setVisible(false);
+    }//GEN-LAST:event_fullTabelActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JDateChooser HireDate;
     private javax.swing.JComboBox<String> comboDepartmentId;
     private javax.swing.JComboBox<String> comboJobId;
     private javax.swing.JComboBox<String> comboManagerId;
+    private javax.swing.JButton fullTabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
