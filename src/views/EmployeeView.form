@@ -206,7 +206,7 @@
                                       <Component id="txtSalary" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtCommision" alignment="0" max="32767" attributes="0"/>
                                       <Component id="comboJobId" min="-2" max="-2" attributes="0"/>
-                                      <Component id="HireDate" max="32767" attributes="0"/>
+                                      <Component id="HireDate" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
@@ -272,7 +272,7 @@
                           <Component id="txtPhone" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
                           <Component id="HireDate" min="-2" max="-2" attributes="0"/>
@@ -308,7 +308,7 @@
                           <Component id="resetTambah" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="tombolHapus" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="13" max="32767" attributes="0"/>
+                      <EmptySpace pref="17" max="32767" attributes="0"/>
                       <Component id="batalTambah" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>

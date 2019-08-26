@@ -272,12 +272,12 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
 //        if (cek_status()==true) {
-//            iPanel.removeAll();
-//        
-//        iPanel.updateUI();
-//        View_Department1 view = new View_Department1();
-//        view.setVisible(true);
-//        iPanel.add(view);
+            iPanel.removeAll();
+        
+        iPanel.updateUI();
+        InternalDepartment view = new InternalDepartment();
+        view.setVisible(true);
+        iPanel.add(view);
 //        }
     }//GEN-LAST:event_jLabel2MouseClicked
 
