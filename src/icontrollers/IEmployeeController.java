@@ -18,7 +18,6 @@ import models.Job;
 public interface IEmployeeController {
     public List<Employee> getAll();
     public List<Employee> search(String key);
-    public List<Employee> searchID(int key);
     public List<Employee> searchSalary(String key);
     public Employee getById(String id);
     public String save(String id, String firtName, String lastName, String email, String phone, String hireDate, String jobId, String salary, String commision, String managerId, String departmentId);
