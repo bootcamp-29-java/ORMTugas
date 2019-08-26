@@ -46,6 +46,10 @@ public class Region implements Serializable {
 
     public Region() {
     }
+
+    public Region(BigDecimal id) {
+        this.id = id;
+    }
     
     public BigDecimal getId() {
         return id;
