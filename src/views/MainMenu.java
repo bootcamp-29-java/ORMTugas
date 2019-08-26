@@ -20,35 +20,35 @@ public class MainMenu extends javax.swing.JFrame {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         
-        if (acc.getUname()==null) {
-            JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!", "WARNING", JOptionPane.WARNING_MESSAGE);
-            jLabel8.setText("ANDA BELUM LOGIN! KLIK UNTUK LOGIN");
-            
-        } else {
-            jLabel8.setText("SELAMAT DATANG "+acc.getUname());
-        }
+//        if (acc.getUname()==null) {
+//            JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!", "WARNING", JOptionPane.WARNING_MESSAGE);
+//            jLabel8.setText("ANDA BELUM LOGIN! KLIK UNTUK LOGIN");
+//            
+//        } else {
+//            jLabel8.setText("SELAMAT DATANG "+acc.getUname());
+//        }
     }
     
-    private boolean cek_status(){
-        boolean result = false;
-        if (acc.getUname()==null) {
-            JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!","WARNING" , JOptionPane.WARNING_MESSAGE);
-        } else {
-            result = true;
-        }
-        return result;
-    }
-    
-    private boolean cek_status2(){
-        boolean result = false;
-        if (acc.getUname()==null) {
-            JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!","WARNING" , JOptionPane.WARNING_MESSAGE);
-        } else {
-            
-            result = true;
-        }
-        return result;
-    }
+//    private boolean cek_status(){
+//        boolean result = false;
+//        if (acc.getUname()==null) {
+//            JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!","WARNING" , JOptionPane.WARNING_MESSAGE);
+//        } else {
+//            result = true;
+//        }
+//        return result;
+//    }
+//    
+//    private boolean cek_status2(){
+//        boolean result = false;
+//        if (acc.getUname()==null) {
+//            JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!","WARNING" , JOptionPane.WARNING_MESSAGE);
+//        } else {
+//            
+//            result = true;
+//        }
+//        return result;
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -252,12 +252,12 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
 //       if (cek_status()==true) {
-//        iPanel.removeAll();
-//       iPanel.updateUI();
-//       InternalLocation view = new InternalLocation();
-//       view.setVisible(true);
-//       iPanel.add(view);
-//       }
+        iPanel.removeAll();
+       iPanel.updateUI();
+       ViewLocation view = new ViewLocation();
+       view.setVisible(true);
+       iPanel.add(view);
+   //    }
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
