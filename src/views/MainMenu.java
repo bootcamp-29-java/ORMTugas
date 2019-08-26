@@ -232,11 +232,11 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
 //        if (cek_status()==true) {
-//            iPanel.removeAll();
-//            iPanel.updateUI();
-//            InternalEmployeeView view = new InternalEmployeeView();
-//            view.setVisible(true);
-//            iPanel.add(view);
+            iPanel.removeAll();
+            iPanel.updateUI();
+            InternalEmployeeView view = new InternalEmployeeView();
+            view.setVisible(true);
+            iPanel.add(view);
 ////        }
     }//GEN-LAST:event_jLabel1MouseClicked
 
