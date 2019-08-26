@@ -23,9 +23,11 @@ public class MainMenu extends javax.swing.JFrame {
         if (acc.getUname()==null) {
             JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!", "WARNING", JOptionPane.WARNING_MESSAGE);
             jLabel8.setText("ANDA BELUM LOGIN! KLIK UNTUK LOGIN");
-            
+            lblVerif.setText("LOGIN");
         } else {
-            jLabel8.setText("SELAMAT DATANG "+acc.getUname());
+            jLabel8.setText("Selamat Datang "+acc.getUname());
+            lblVerif.setText("LOGOUT");
+            
         }
     }
     
@@ -69,6 +71,7 @@ public class MainMenu extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        lblVerif = new javax.swing.JLabel();
         iPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -151,6 +154,13 @@ public class MainMenu extends javax.swing.JFrame {
             }
         });
 
+        lblVerif.setText("LOGIN");
+        lblVerif.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblVerifMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -158,6 +168,7 @@ public class MainMenu extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblVerif)
                     .addComponent(jLabel2)
                     .addComponent(jLabel4)
                     .addComponent(jLabel3)
@@ -181,7 +192,9 @@ public class MainMenu extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(lblVerif)
+                .addContainerGap(70, Short.MAX_VALUE))
         );
 
         iPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -300,6 +313,24 @@ public class MainMenu extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jLabel8MouseClicked
 
+    private void lblVerifMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblVerifMouseClicked
+         if(cek_status2()==false){
+            new LoginView().setVisible(true);
+            this.dispose();
+        }
+        else{
+            int jawab = JOptionPane.showConfirmDialog(this, "YAKIN UNTUK LOGOUT?");
+            switch(jawab){
+                case JOptionPane.YES_OPTION:
+                    System.exit(0);
+                    break;
+                case JOptionPane.NO_OPTION:
+                    setDefaultCloseOperation(MainMenu.DO_NOTHING_ON_CLOSE);
+                    break;
+            }
+        }
+    }//GEN-LAST:event_lblVerifMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -354,5 +385,6 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblVerif;
     // End of variables declaration//GEN-END:variables
 }

@@ -54,7 +54,7 @@ public class JobDAO implements IJobDAO{
         try {
             session = factory.openSession();
             transaction = session.beginTransaction();
-            Query query = session.createQuery("FROM Job WHERE tittle LIKE :key OR id LIKE :key");
+            Query query = session.createQuery("FROM Job WHERE tittle LIKE :key");
             query.setParameter("key", "%"+key+"%");
             jobs = query.list();
         } catch (Exception e) {
