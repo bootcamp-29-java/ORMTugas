@@ -59,16 +59,6 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
             cmbIdRegion.addItem(s);
         }
     }
-    
-    private void setC(){
-        HashMap<String, BigDecimal> map = new HashMap<String, BigDecimal>();
-        map = addCombo();
-        cmbIdRegion.setSelectedItem(idView);
-        for (String s : map.keySet()) {
-            cmbIdRegion.addItem(s);
-        }
-        System.out.println("Jalan");
-    }
 
     public void refreshTable() {
         listCountry = countryController.getAll();
@@ -76,13 +66,12 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
         dtm.setRowCount(0);
         no = 1;
         for (Country country : listCountry) {
-            idSave = country.getRegion().getId();
-            mapReg.put(country.getRegion().getName(), idSave);
+            
             dtm.addRow(new Object[]{
                 no++,
                 country.getId(),
                 country.getName(),
-                country.getRegion().getId(),
+                country.getRegion().getName(),
             });
         }
         if (tblCounrty.getRowCount() > 0) {
@@ -103,7 +92,6 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
         txtId.setText((String) tblCounrty.getValueAt(row, 1));
         txtName.setText((String) tblCounrty.getValueAt(row, 2));
         cmbIdRegion.setSelectedItem(tblCounrty.getValueAt(row, 3).toString());
-        setC();
     }
     
     public void tampilCombo(){
