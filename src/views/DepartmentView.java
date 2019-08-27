@@ -1,12 +1,18 @@
 package views;
 
 import controllers.DepartmentController;
+import controllers.EmployeeController;
+import controllers.LocationController;
 import daos.DepartmentDAO;
 import icontrollers.IDepartmentController;
+import icontrollers.IEmployeeController;
+import icontrollers.ILocationController;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import models.Department;
@@ -53,7 +59,6 @@ public class DepartmentView extends javax.swing.JFrame {
         txtManagerID = new javax.swing.JLabel();
         txtLocationID = new javax.swing.JLabel();
         btnSave = new javax.swing.JButton();
-        btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         cbManagerID = new javax.swing.JComboBox<>();
         cbLocationID = new javax.swing.JComboBox<>();
@@ -221,10 +226,10 @@ public class DepartmentView extends javax.swing.JFrame {
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         pnInputDepartment.add(btnSave, gridBagConstraints);
 
-        btnUpdate.setText("Update");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
+                btnDeleteActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -234,23 +239,14 @@ public class DepartmentView extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipady = 10;
         gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
-        pnInputDepartment.add(btnUpdate, gridBagConstraints);
-
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.ipady = 10;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
         pnInputDepartment.add(btnDelete, gridBagConstraints);
 
         cbManagerID.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-" }));
+        cbManagerID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbManagerIDActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.ipadx = 100;
@@ -259,6 +255,11 @@ public class DepartmentView extends javax.swing.JFrame {
         pnInputDepartment.add(cbManagerID, gridBagConstraints);
 
         cbLocationID.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-" }));
+        cbLocationID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbLocationIDActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 3;
         gridBagConstraints.gridy = 1;
@@ -279,12 +280,16 @@ public class DepartmentView extends javax.swing.JFrame {
 
     SessionFactory factory = HibernateUtil.getSessionFactory();
     IDepartmentController idcon = new DepartmentController(factory);
+    IEmployeeController iecon = new EmployeeController(factory);
+    ILocationController ilcon = new LocationController(factory);
     Department department = new Department();
     List<Department> listDepartment;
+    List<Employee> listEmployee;
+    List<Location> listLocation;
     private DefaultTableModel tabmode;
 
     protected void dt_Department() {
-        Object[] Line = {"Number", "ID", "Name", "Manager ID", "Location ID"};
+        Object[] Line = {"Number", "ID", "Name", "Manager ID", "Manager Name", "Location ID", "City"};
         tabmode = new DefaultTableModel(null, Line);
         String findData = tfSearch.getText();
         int n = 1;
@@ -293,7 +298,9 @@ public class DepartmentView extends javax.swing.JFrame {
                 n,
                 department.getId(),
                 department.getName(),
+                (department.getManager() == null) ? "" : department.getManager().getId(),
                 (department.getManager() == null) ? "" : department.getManager().getFirstName() + " " + department.getManager().getLastName(),
+                (department.getLocation() == null) ? "" : department.getLocation().getId(),
                 (department.getLocation() == null) ? "" : department.getLocation().getCity()
             });
             n++;
@@ -308,20 +315,28 @@ public class DepartmentView extends javax.swing.JFrame {
         cbLocationID.setSelectedItem("-");
     }
 
+    String managerID = null;
     protected void listManagerID() {
-        idcon.searchID(1);
-        listDepartment = idcon.searchID(1);
-        for (Object data : listDepartment.toArray()) {
-            cbManagerID.addItem(data.toString());
+        listEmployee = iecon.search("");
+        for (Employee data : listEmployee) {
+            cbManagerID.addItem(data.getId().toString()+" - "+data.getFirstName()+" "+data.getLastName());
         }
     }
 
+    String locationID = null;
     protected void listLocationID() {
-        idcon.searchID(1);
-        listDepartment = idcon.searchID(2);
-        for (Object data : listDepartment.toArray()) {
-            cbLocationID.addItem(data.toString());
+        listLocation = ilcon.search("");
+        for (Location data : listLocation) {
+            cbLocationID.addItem(data.getId().toString()+" - "+data.getCity());
         }
+    }
+    
+    private String getIDRelation(String text){
+        Pattern p = Pattern.compile("\\d+");
+        Matcher m = p.matcher(text);
+        m.find();
+        String hasil = m.group(0);
+        return hasil;
     }
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -337,7 +352,7 @@ public class DepartmentView extends javax.swing.JFrame {
                     if (cbLocationID.getSelectedItem().equals("-")) {
                         JOptionPane.showMessageDialog(null, "Location ID hasn't been filled");
                     } else {
-                        idcon.save(tfID.getText(), tfName.getText(), cbManagerID.getSelectedItem().toString(), cbLocationID.getSelectedItem().toString());
+                        idcon.save(tfID.getText(), tfName.getText(), getIDRelation(cbManagerID.getSelectedItem().toString()), getIDRelation(cbLocationID.getSelectedItem().toString()));
                         dt_Department();
                         empty();
                     }
@@ -345,28 +360,6 @@ public class DepartmentView extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (tfID.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Department ID hasn't been filled");
-        } else {
-            if (tfName.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Department Name hasn't been filled");
-            } else {
-                if (cbManagerID.getSelectedItem().equals("-")) {
-                    JOptionPane.showMessageDialog(null, "Manager ID hasn't been filled");
-                } else {
-                    if (cbLocationID.getSelectedItem().equals("-")) {
-                        JOptionPane.showMessageDialog(null, "Location ID hasn't been filled");
-                    } else {
-                        idcon.save(tfID.getText(), tfName.getText(), cbManagerID.getSelectedItem().toString(), cbLocationID.getSelectedItem().toString());
-                        dt_Department();
-                        empty();
-                    }
-                }
-            }
-        }
-    }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if (tfID.getText().isEmpty()) {
@@ -386,12 +379,13 @@ public class DepartmentView extends javax.swing.JFrame {
         int dt = tblDepartment.getSelectedRow();
         String a = (tabmode.getValueAt(dt, 1) != null) ? (tabmode.getValueAt(dt, 1).toString()) : "";
         String b = (tabmode.getValueAt(dt, 2) != null) ? (tabmode.getValueAt(dt, 2).toString()) : "";
-        String c = (tabmode.getValueAt(dt, 3) != null) ? (tabmode.getValueAt(dt, 3).toString()) : "";
-        String d = (tabmode.getValueAt(dt, 4) != null) ? (tabmode.getValueAt(dt, 4).toString()) : "";
+        String c = ((tabmode.getValueAt(dt, 3) != null) ? (tabmode.getValueAt(dt, 3).toString()) : "-") + " - " + ((tabmode.getValueAt(dt, 4) != null) ? (tabmode.getValueAt(dt, 4).toString()) : "");
+        String d = ((tabmode.getValueAt(dt, 5) != null) ? (tabmode.getValueAt(dt, 5).toString()) : "-") + " - " + ((tabmode.getValueAt(dt, 6) != null) ? (tabmode.getValueAt(dt, 6).toString()) : "");
         tfID.setText(a);
         tfName.setText(b);
-//        cbManagerID.setText(c);
-//        tfLocationID.setText(d);
+        cbManagerID.setSelectedItem(c);
+        cbLocationID.setSelectedItem(d);
+        System.out.println(a+b+c+d);
     }//GEN-LAST:event_tblDepartmentMouseClicked
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
@@ -415,6 +409,14 @@ public class DepartmentView extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_tfIDKeyTyped
+    
+    private void cbManagerIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbManagerIDActionPerformed
+
+    }//GEN-LAST:event_cbManagerIDActionPerformed
+
+    private void cbLocationIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbLocationIDActionPerformed
+
+    }//GEN-LAST:event_cbLocationIDActionPerformed
 
     /**
      * @param args the command line arguments
@@ -457,7 +459,6 @@ public class DepartmentView extends javax.swing.JFrame {
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cbLocationID;
     private javax.swing.JComboBox<String> cbManagerID;
     private javax.swing.JPanel pnDataDepartment;
