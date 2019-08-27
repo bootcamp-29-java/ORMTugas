@@ -113,6 +113,7 @@ public class MainMenu extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setText("EMPLOYEES");
+        jLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel1MouseClicked(evt);
@@ -120,6 +121,7 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         jLabel2.setText("DEPARTMENTS");
+        jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel2MouseClicked(evt);
@@ -127,6 +129,7 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         jLabel3.setText("LOCATIONS");
+        jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel3MouseClicked(evt);
@@ -134,6 +137,7 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         jLabel4.setText("JOBS");
+        jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel4MouseClicked(evt);
@@ -141,6 +145,7 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         jLabel5.setText("REGIONS");
+        jLabel5.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel5MouseClicked(evt);
@@ -148,6 +153,7 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         jLabel6.setText("COUNTRIES");
+        jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel6MouseClicked(evt);
@@ -155,6 +161,7 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         lblVerif.setText("LOGIN");
+        lblVerif.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblVerif.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblVerifMouseClicked(evt);

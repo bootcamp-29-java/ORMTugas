@@ -55,7 +55,9 @@ public class LoginView extends javax.swing.JFrame {
 
         jLabel2.setText("PASSWORD");
 
+        jLabel3.setForeground(new java.awt.Color(51, 51, 255));
         jLabel3.setText("Belum Punya Akun? Register Disini");
+        jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel3MouseClicked(evt);
@@ -100,7 +102,8 @@ public class LoginView extends javax.swing.JFrame {
                 .addGap(49, 49, 49))
         );
 
-        setBounds(0, 0, 460, 244);
+        setSize(new java.awt.Dimension(460, 244));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

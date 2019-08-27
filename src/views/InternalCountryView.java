@@ -2,6 +2,8 @@ package views;
 
 import controllers.CountryController;
 import controllers.RegionController;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
@@ -16,7 +18,9 @@ import tools.HibernateUtil;
 public class InternalCountryView extends javax.swing.JInternalFrame {
 
     private CountryController countryController;
+    private RegionController regionController;
     private List<Country> listCountry;
+    private List<Region> listRegion;
     private DefaultTableModel dtm;
     private DefaultTableModel dtm2;
     public Country country;
@@ -25,6 +29,9 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
     int no;
     private String[] tabelHeader;
     private String[] tabelHeader2;
+    private String viewId;
+    private BigDecimal idSave,idView;
+    private HashMap<String, BigDecimal> mapReg = new HashMap<String, BigDecimal>();
 
     SessionFactory factory = HibernateUtil.getSessionFactory();
     Session session;
@@ -36,12 +43,31 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
     public InternalCountryView() {
         initComponents();
         countryController = new CountryController(factory);
+        regionController = new RegionController(factory);
         tabelHeader = new String[]{"NO", "COUNTRY ID", "COUNTRY NAME", "REGION ID"};
         dtm = new DefaultTableModel(null, tabelHeader);
         tblCounrty.setModel(dtm);
         dtm.setRowCount(0);
         refreshTable();
-        tampilCombo();
+        addC();
+    }
+    
+    private void addC(){
+        HashMap<String, BigDecimal> map = new HashMap<String, BigDecimal>();
+        map = addCombo();
+        for (String s : map.keySet()) {
+            cmbIdRegion.addItem(s);
+        }
+    }
+    
+    private void setC(){
+        HashMap<String, BigDecimal> map = new HashMap<String, BigDecimal>();
+        map = addCombo();
+        cmbIdRegion.setSelectedItem(idView);
+        for (String s : map.keySet()) {
+            cmbIdRegion.addItem(s);
+        }
+        System.out.println("Jalan");
     }
 
     public void refreshTable() {
@@ -50,11 +76,13 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
         dtm.setRowCount(0);
         no = 1;
         for (Country country : listCountry) {
+            idSave = country.getRegion().getId();
+            mapReg.put(country.getRegion().getName(), idSave);
             dtm.addRow(new Object[]{
                 no++,
                 country.getId(),
                 country.getName(),
-                country.getRegion().getId()
+                country.getRegion().getId(),
             });
         }
         if (tblCounrty.getRowCount() > 0) {
@@ -75,6 +103,7 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
         txtId.setText((String) tblCounrty.getValueAt(row, 1));
         txtName.setText((String) tblCounrty.getValueAt(row, 2));
         cmbIdRegion.setSelectedItem(tblCounrty.getValueAt(row, 3).toString());
+        setC();
     }
     
     public void tampilCombo(){
@@ -198,6 +227,11 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
         jLabel2.setText("COUNTRY ID");
 
         cmbIdRegion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Region -" }));
+        cmbIdRegion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbIdRegionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -264,14 +298,14 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
                             .addComponent(cmbIdRegion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnSave)
                             .addComponent(btnEdit)
                             .addComponent(btnDelete)
                             .addComponent(btnCancel)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -299,13 +333,12 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         String id = txtId.getText();
         String name = txtName.getText();
-        String regionId = (String) cmbIdRegion.getSelectedItem();
         if (txtId.getText().length() > 2) {
             JOptionPane.showMessageDialog(null, "ID MAKSIMAL 2 KARAKTER");
         } else if (!txtId.getText().matches("^[A-Z]+$")) {
             JOptionPane.showMessageDialog(null, "ID HARUS HURUF BESAR SEMUA");
         } else {
-            JOptionPane.showMessageDialog(this, countryController.save(id, name, regionId));
+            JOptionPane.showMessageDialog(this, countryController.save(id, name, idSave.toString()));
         }
         empty();
         refreshTable();
@@ -341,8 +374,15 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
     private void tblCounrtyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCounrtyMouseClicked
         setText();
         txtId.setEnabled(false);
+        
         txtName.requestFocus();
     }//GEN-LAST:event_tblCounrtyMouseClicked
+
+    private void cmbIdRegionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbIdRegionActionPerformed
+        HashMap<String, BigDecimal> map = new HashMap<String, BigDecimal>();
+        map = addCombo();
+        idSave = map.get(cmbIdRegion.getSelectedItem().toString());
+    }//GEN-LAST:event_cmbIdRegionActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -364,4 +404,14 @@ public class InternalCountryView extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtSearchCountry;
     // End of variables declaration//GEN-END:variables
+    
+    private HashMap<String,BigDecimal> addCombo(){
+        HashMap<String,BigDecimal> map = new HashMap<String, BigDecimal>();
+        listRegion = regionController.search("");
+        for (Region region : listRegion) {
+            map.put(region.getName(), region.getId());
+        }
+        return map;
+    }
+    
 }
