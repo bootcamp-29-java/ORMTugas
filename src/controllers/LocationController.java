@@ -8,6 +8,7 @@ package controllers;
 import idaos.ILocationDAO;
 import daos.LocationDAO;
 import icontrollers.ILocationController;
+import java.util.ArrayList;
 import java.util.List;
 import models.Country;
 import models.Location;
@@ -68,7 +69,6 @@ public class LocationController implements ILocationController {
     public String delete(String id) {
         String result = "";
         boolean issave = false;
-
         Location location = new Location();
         location = ildao.getById(Short.parseShort(id));
         location.setId(Short.parseShort(id));
@@ -84,7 +84,7 @@ public class LocationController implements ILocationController {
     }
 
     @Override
-    public List<Location> searchID() {
+    public List<Location> searchID() {       
         return ildao.searchID();
     }
 

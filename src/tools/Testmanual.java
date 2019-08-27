@@ -30,11 +30,11 @@ public class Testmanual {
         DepartmentDAO ddao = new DepartmentDAO(factory);
 //        Department department = ddao.getByID(Short.parseShort("310"));
 //        System.out.println(department.getId()+" - "+department.getName());
-        Department department = new Department();
-        department.setId(Short.parseShort("320"));
-        department.setName("WowWoWoW");
-        System.out.println(ddao.saveOrDelete(department,true));
-        System.out.println(factory);
+//        Department department = new Department();
+//        department.setId(Short.parseShort("320"));
+//        department.setName("WowWoWoW");
+//        System.out.println(ddao.saveOrDelete(department,true));
+//        System.out.println(factory);
 
 //        RegionDAO Rdao = new RegionDAO(factory);
         LocationDAO ldao = new LocationDAO(factory);
@@ -60,9 +60,9 @@ public class Testmanual {
 //        for(Location location : ldao.search("t")){
 //         System.out.println(location.getStateProvince()+"-"+location.getCity());
 //        }
-        for (Location location : ldao.getAll()) {
-            System.out.println("Region -> " + location.getId() + " - " + location.getStateProvince());
-
-        }
+//        for (Location location : ldao.getAll()) {
+//            System.out.println("Region -> " + location.getId() + " - " + location.getStateProvince());
+//
+//        }
     }
 }

@@ -33,7 +33,7 @@ public class RegionDAO implements IRegionDAO{
         try {
             session = factory.openSession();
             transaction = session.beginTransaction();
-            reg = session.createQuery("from Region").list();
+            reg = session.createQuery("FROM Region ORDER BY id").list();
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,41 +116,41 @@ public class RegionDAO implements IRegionDAO{
         }
         return result;
     }
-    
-    @Override
-    public boolean saveorupdate(Region region){
-        boolean result = false;
-        try {
-            session = factory.openSession();
-            transaction = session.beginTransaction();
-            session.saveOrUpdate(region);
-            transaction.commit();
-            result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            session.close();
-        }
-        return result;
-    }
-    
-    @Override
-    public boolean deleteaja(Region region){
-        
-        boolean result = false;
-        try {
-            session = factory.openSession();
-            transaction = session.beginTransaction();
-            session.delete(region);
-            transaction.commit();
-            result = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally{
-            session.close();
-        }
-        return result;
-    }
+//    
+//    @Override
+//    public boolean saveorupdate(Region region){
+//        boolean result = false;
+//        try {
+//            session = factory.openSession();
+//            transaction = session.beginTransaction();
+//            session.saveOrUpdate(region);
+//            transaction.commit();
+//            result = true;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        finally {
+//            session.close();
+//        }
+//        return result;
+//    }
+//    
+//    @Override
+//    public boolean deleteaja(Region region){
+//        
+//        boolean result = false;
+//        try {
+//            session = factory.openSession();
+//            transaction = session.beginTransaction();
+//            session.delete(region);
+//            transaction.commit();
+//            result = true;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        finally{
+//            session.close();
+//        }
+//        return result;
+//    }
 }

@@ -23,7 +23,7 @@ public interface IRegionDAO {
 
     public boolean saveordelete(Region region, boolean issave);
 
-    public boolean saveorupdate(Region region);
-
-    public boolean deleteaja(Region region);
+//    public boolean saveorupdate(Region region);
+//
+//    public boolean deleteaja(Region region);
 }

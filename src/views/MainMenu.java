@@ -20,26 +20,26 @@ public class MainMenu extends javax.swing.JFrame {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         
-        if (acc.getUname()==null) {
-            JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!", "WARNING", JOptionPane.WARNING_MESSAGE);
-            jLabel8.setText("ANDA BELUM LOGIN! KLIK UNTUK LOGIN");
-            lblVerif.setText("LOGIN");
-        } else {
-            jLabel8.setText("Selamat Datang "+acc.getUname());
-            lblVerif.setText("LOGOUT");
-            
-        }
+//        if (acc.getUname()==null) {
+//            JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!", "WARNING", JOptionPane.WARNING_MESSAGE);
+//            jLabel8.setText("ANDA BELUM LOGIN! KLIK UNTUK LOGIN");
+//            lblVerif.setText("LOGIN");
+//        } else {
+//            jLabel8.setText("Selamat Datang "+acc.getUname());
+//            lblVerif.setText("LOGOUT");
+//            
+//        }
     }
     
-    private boolean cek_status(){
-        boolean result = false;
-        if (acc.getUname()==null) {
-            JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!","WARNING" , JOptionPane.WARNING_MESSAGE);
-        } else {
-            result = true;
-        }
-        return result;
-    }
+//    private boolean cek_status(){
+//        boolean result = false;
+//        if (acc.getUname()==null) {
+//            JOptionPane.showMessageDialog(this, "ANDA BELUM LOGIN!","WARNING" , JOptionPane.WARNING_MESSAGE);
+//        } else {
+//            result = true;
+//        }
+//        return result;
+//    }
     
     private boolean cek_status2(){
         boolean result = false;
@@ -241,64 +241,64 @@ public class MainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-       if (cek_status()==true) {
+//       if (cek_status()==true) {
        iPanel.removeAll();
        iPanel.updateUI();
        RegionView2 view = new RegionView2();
        view.setVisible(true);
        iPanel.add(view);
-       }
+//       }
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-        if (cek_status()==true) {
+//        if (cek_status()==true) {
             iPanel.removeAll();
             iPanel.updateUI();
             InternalEmployeeView view = new InternalEmployeeView();
             view.setVisible(true);
             iPanel.add(view);
-        }
+//        }
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
-      if (cek_status()==true) {
+//      if (cek_status()==true) {
         iPanel.removeAll();
       iPanel.updateUI();
         InternalJobView view = new InternalJobView();
        view.setVisible(true);
        iPanel.add(view);
-      }
+//      }
     }//GEN-LAST:event_jLabel4MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-       if (cek_status()==true) {
+//       if (cek_status()==true) {
         iPanel.removeAll();
        iPanel.updateUI();
        ViewLocation view = new ViewLocation();
        view.setVisible(true);
        iPanel.add(view);
-       }
+//       }
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-      if (cek_status()==true) {
+//      if (cek_status()==true) {
           iPanel.removeAll();
       iPanel.updateUI();
        InternalCountryView view = new InternalCountryView();
        view.setVisible(true);
        iPanel.add(view);
-      }
+//      }
     }//GEN-LAST:event_jLabel6MouseClicked
 
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-        if (cek_status()==true) {
+//        if (cek_status()==true) {
             iPanel.removeAll();
         
         iPanel.updateUI();
         InternalDepartment view = new InternalDepartment();
         view.setVisible(true);
         iPanel.add(view);
-        }
+//        }
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
