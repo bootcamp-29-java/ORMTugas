@@ -116,14 +116,11 @@ public class LocationDAO implements ILocationDAO {
     public List<Location> searchID() {
         List<Location> listCountry = new ArrayList<>();
         String query = null;
-        query = "SELECT id FROM Country";
-//        if(id == 1){
-//            
-//        }
+        query = "SELECT id FROM Country";       
         try {
             session = factory.openSession();
             transaction = session.beginTransaction();
-            listCountry = session.createQuery(query).list();
+            listCountry = session.createQuery(query).list();            
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

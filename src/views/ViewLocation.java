@@ -11,6 +11,7 @@ import icontrollers.ILocationController;
 import java.sql.Connection;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import models.Location;
 import javax.swing.table.DefaultTableModel;
 import models.Country;
@@ -50,16 +51,14 @@ public class ViewLocation extends javax.swing.JInternalFrame {
      */
     public ViewLocation() {
         initComponents();
-//        Session session =
-//        session = factory.openSession();
-//        transaction = session.beginTransaction();
         controller2 = new LocationController(factory);
         controller = new LocationController(factory);
-        tableHeader = new String[]{"No", "Id", "streetAddress", "postalCode", "city", "stateProvince", "country"};
+        tableHeader = new String[]{"NO", "ID", "Street Address", "Postal Code", "city", "State Province", "Country","Country ID"};
         dtm = new DefaultTableModel(null, tableHeader);
         tblLocation.setModel(dtm);
         refreshTable();
         tampilCB();
+
     }
 
     public void refreshTable() {
@@ -69,7 +68,6 @@ public class ViewLocation extends javax.swing.JInternalFrame {
         dtm.setRowCount(0);
         no = 1;
         for (Location l : listLocation) {
-            System.out.println("jalan");
             dtm.addRow(new Object[]{
                 no++,
                 l.getId(),
@@ -77,35 +75,40 @@ public class ViewLocation extends javax.swing.JInternalFrame {
                 l.getPostalCode(),
                 l.getCity(),
                 l.getStateProvince(),
-                (l.getCountry() == null) ? "" : l.getCountry().getId()//short from dengan pertama adalah kondisi dan setelah : adalah elsenya
+                (l.getCountry() == null) ? "" : l.getCountry().getName(),//short from dengan pertama adalah kondisi dan setelah : adalah elsenya
+                (l.getCountry() == null) ? "" : l.getCountry().getId()
             });
         }
+
         if (tblLocation.getRowCount() > 0) {
             row = tblLocation.getRowCount() - 1;
             tblLocation.setRowSelectionInterval(row, row);
         }
+
     }
 
     protected void clearText() {
         txtId.setText(null);
         txtCity.setText(null);
-//        txtCountry.setText(null);
         txtStateProvince.setText(null);
         txtStreetAddress.setText(null);
+        txtPostac.setText(null);
         txtSearch.setText(null);
+        txtId.setEnabled(true);
+        refreshTable();
     }
 
     public void search() {
-        Object[] Line = {"No","ID", "Street Address", "Postal Code", "City", "State Province", "country"};
+        Object[] Line = {"NO", "ID", "Street Address", "Postal Code", "City", "State Province", "Country","Country ID"};
         dtm = new DefaultTableModel(null, Line);
         String findData = txtSearch.getText();
         try {
-            no =1;
+            no = 1;
             for (Location location : ldao.search(findData)) {
                 if (location.getCountry() == null) {
                     location.getCountry();
                 }
-                System.out.println(location.getId() + " | " + location.getStreetAddress() + " | " + location.getPostalCode() + " | " + location.getCity() + " | " + location.getStateProvince() + " | " + location.getCountry());
+                System.out.println(location.getId() + " | " + location.getStreetAddress().length() + " | " + location.getPostalCode() + " | " + location.getCity() + " | " + location.getStateProvince().length() + " | " + location.getCountry() + "" + location.getCountry());
                 dtm.addRow(new Object[]{
                     no++,
                     location.getId(),
@@ -113,22 +116,27 @@ public class ViewLocation extends javax.swing.JInternalFrame {
                     location.getPostalCode(),
                     location.getCity(),
                     location.getStateProvince(),
-                    (location.getCountry() == null) ? "" : location.getCountry().getId()//konsepnya (kondisi)?: if true : if false
+                    (location.getCountry() == null) ? "" : location.getCountry().getName(),//konsepnya (kondisi)?: if true : if false
+                    (location.getCountry() == null) ? "" : location.getCountry().getId()
                 });
             }
             tblLocation.setModel(dtm);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Data failed to be called");
+            JOptionPane.showMessageDialog(null, "Data tidak ditemukan");
         }
     }
-        
-    public void tampilCB(){
-       controller2.searchID();
-       listLocation = controller2.searchID();
+//    public int 
+
+    public void tampilCB() {
+        boolean result;
+        controller2.searchID();
+        listLocation = controller2.searchID();
         for (Object data : listLocation.toArray()) {
             CBCountry.addItem(data.toString());
+
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -156,8 +164,9 @@ public class ViewLocation extends javax.swing.JInternalFrame {
         jPanel3 = new javax.swing.JPanel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        btnInsert = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -184,6 +193,11 @@ public class ViewLocation extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel1.setText("Id");
 
+        txtId.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtIdFocusLost(evt);
+            }
+        });
         txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdActionPerformed(evt);
@@ -195,6 +209,12 @@ public class ViewLocation extends javax.swing.JInternalFrame {
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel4.setText("Street Addrees");
+
+        txtStreetAddress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStreetAddressActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("City");
@@ -228,7 +248,7 @@ public class ViewLocation extends javax.swing.JInternalFrame {
                     .addComponent(txtPostac)
                     .addComponent(txtId)
                     .addComponent(CBCountry, 0, 137, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5)
                     .addComponent(jLabel4)
@@ -263,7 +283,7 @@ public class ViewLocation extends javax.swing.JInternalFrame {
                         .addComponent(jLabel7)
                         .addComponent(txtStateProvince, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(CBCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         btnSearch.setText("Search");
@@ -273,10 +293,10 @@ public class ViewLocation extends javax.swing.JInternalFrame {
             }
         });
 
-        btnInsert.setText("Save");
-        btnInsert.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnInsertActionPerformed(evt);
+                btnSaveActionPerformed(evt);
             }
         });
 
@@ -287,36 +307,44 @@ public class ViewLocation extends javax.swing.JInternalFrame {
             }
         });
 
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 887, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGap(5, 5, 5)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(35, 35, 35)
-                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnInsert, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(18, 18, 18)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(5, 5, 5)))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 57, Short.MAX_VALUE)
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGap(17, 17, 17)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnSearch)
-                        .addComponent(btnInsert)
-                        .addComponent(btnDelete))
-                    .addContainerGap(17, Short.MAX_VALUE)))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch)
+                    .addComponent(btnSave)
+                    .addComponent(btnDelete)
+                    .addComponent(btnRefresh))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         tblLocation.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -348,17 +376,14 @@ public class ViewLocation extends javax.swing.JInternalFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 867, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(109, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -367,10 +392,13 @@ public class ViewLocation extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -381,7 +409,8 @@ public class ViewLocation extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -395,49 +424,44 @@ public class ViewLocation extends javax.swing.JInternalFrame {
         String d = dtm.getValueAt(dt, 4).toString();
         String e = (dtm.getValueAt(dt, 5)) != null ? (dtm.getValueAt(dt, 5).toString()) : "";
         String f = dtm.getValueAt(dt, 6).toString();
+        String g = dtm.getValueAt(dt, 7).toString();
         txtId.setText(a);
         txtStreetAddress.setText(b);
         txtPostac.setText(c);
         txtCity.setText(d);
         txtStateProvince.setText(e);
 //        txtCountry(f);
-        CBCountry.setSelectedItem(f);
+        CBCountry.setSelectedItem(g);
+        txtId.setEnabled(false);
     }//GEN-LAST:event_tblLocationMouseClicked
 
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdActionPerformed
 
-    private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         try {
             if (txtId.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "ID hasn't been filled");
+                JOptionPane.showMessageDialog(null, "ID tidak boleh kosong");
                 txtId.requestFocus();
             } else {
-                if (txtStreetAddress.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Street Address hasn't been filled");
-                    txtStreetAddress.requestFocus();
+                if (txtCity.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "City harus di isi");
+                    txtCity.requestFocus();
                 } else {
-                    if (txtCity.getText().isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "City hasn't been filled");
-                        txtCity.requestFocus();
-                    } else {
-                        
-                controller.saveOrUpdate(Short.parseShort(txtId.getText()),txtStreetAddress.getText(), txtPostac.getText(),txtCity.getText() ,txtStateProvince.getText(), CBCountry.getSelectedItem().toString());
-//                        controller.saveOrUpdate(txtId.getText(),txtPostac.getText(),txtCity.getText(),txtStateProvince.getText(), txtCountry.getText());
-//                        ldao.saveOrUpdate(txtId.getText(),txtPostac.getText(),txtCity.getText(),txtStateProvince.getText(), txtCountry.getText());
-                        JOptionPane.showMessageDialog(null, "Data successfully save");
-
-                    }
+                    controller.saveOrUpdate(Short.parseShort(txtId.getText()), txtStreetAddress.getText(), txtPostac.getText(), txtCity.getText(), txtStateProvince.getText(), CBCountry.getSelectedItem().toString());
+                    JOptionPane.showMessageDialog(null, "Data berhasil simpan");
                 }
+
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Data failed to insert" + e);
+            JOptionPane.showMessageDialog(null, "Data gagal di simpan");
         }
         refreshTable();
-        clearText();
+
     }
-/*
+
+    /*
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {
          try {
             if (txtId.getText().isEmpty()) {
@@ -466,27 +490,28 @@ public class ViewLocation extends javax.swing.JInternalFrame {
         }
         refreshTable();
         clearText();
-    }//GEN-LAST:event_btnInsertActionPerformed
+    }//GEN-LAST:event_btnSaveActionPerformed
 */
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         try {
             if (txtId.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "ID hasn't been filled");
+                JOptionPane.showMessageDialog(null, "ID harus di isi");
                 txtId.requestFocus();
-            }  else {
-                        
+            } else {
+
                 System.out.println(controller.delete(txtId.getText()));
 //                        controller.saveOrUpdate(txtId.getText(),txtPostac.getText(),txtCity.getText(),txtStateProvince.getText(), txtCountry.getText());
 //                        ldao.saveOrUpdate(txtId.getText(),txtPostac.getText(),txtCity.getText(),txtStateProvince.getText(), txtCountry.getText());
-                        JOptionPane.showMessageDialog(null, "Data brhasil");
+                JOptionPane.showMessageDialog(null, "Data brhasil dihapus");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Data failed to insert" + e);
+            JOptionPane.showMessageDialog(null, "Data gagal di hapus" + e);
         }
         refreshTable();
         clearText();
     }
-/*
+
+    /*
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {
        
     }//GEN-LAST:event_btnDeleteActionPerformed
@@ -496,14 +521,27 @@ public class ViewLocation extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void CBCountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBCountryActionPerformed
-       
+
     }//GEN-LAST:event_CBCountryActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        clearText();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void txtIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdFocusLost
+
+    private void txtStreetAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStreetAddressActionPerformed
+        txtCity.setText(CBCountry.getSelectedObjects().toString());
+    }//GEN-LAST:event_txtStreetAddressActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CBCountry;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnInsert;
+    private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
