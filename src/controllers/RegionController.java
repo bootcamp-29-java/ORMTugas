@@ -86,11 +86,6 @@ public class RegionController implements IRegionController{
             result ="data gagal di simpan";
             //IRdao.saveordelete(region, issave);
         }
-//        if(IRdao.saveorupdate(region)){
-//            result ="data berhasil di simpan";
-//        }else{
-//            result ="maaf data gagal disimpan";
-//        }
         return result;
     }
     

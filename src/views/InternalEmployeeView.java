@@ -78,7 +78,7 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         txtCari = new javax.swing.JTextField();
         tombolCari = new javax.swing.JButton();
         tombolReset = new javax.swing.JButton();
-        kriteriaCari = new javax.swing.JComboBox<>();
+        kriteriaCari = new javax.swing.JComboBox<String>();
         fullTabel = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -101,9 +101,9 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
         txtPhone = new javax.swing.JTextField();
         txtSalary = new javax.swing.JTextField();
         txtCommision = new javax.swing.JTextField();
-        comboJobId = new javax.swing.JComboBox<>();
-        comboManagerId = new javax.swing.JComboBox<>();
-        comboDepartmentId = new javax.swing.JComboBox<>();
+        comboJobId = new javax.swing.JComboBox<String>();
+        comboManagerId = new javax.swing.JComboBox<String>();
+        comboDepartmentId = new javax.swing.JComboBox<String>();
         tombolHapus = new javax.swing.JButton();
         HireDate = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -132,7 +132,7 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
             }
         });
 
-        kriteriaCari.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Default", "ID" }));
+        kriteriaCari.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Default", "ID" }));
 
         fullTabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         fullTabel.setText("Lihat Full Tabel");
@@ -259,16 +259,16 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
 
         txtCommision.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
-        comboJobId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Job -" }));
+        comboJobId.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "- Pilih Job -" }));
         comboJobId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboJobIdActionPerformed(evt);
             }
         });
 
-        comboManagerId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Manager -", "0" }));
+        comboManagerId.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "- Pilih Manager -", "0" }));
 
-        comboDepartmentId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Department -", "0" }));
+        comboDepartmentId.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "- Pilih Department -", "0" }));
 
         tombolHapus.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tombolHapus.setText("Hapus Data");
@@ -302,12 +302,12 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel8))
                             .addGap(20, 20, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtId)
+                                .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
                                 .addComponent(txtFirstName)
                                 .addComponent(txtLastName)
                                 .addComponent(txtEmail)
                                 .addComponent(txtPhone)
-                                .addComponent(HireDate, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(HireDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                             .addComponent(jLabel13)
                             .addGap(0, 0, Short.MAX_VALUE)))
@@ -351,8 +351,8 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(11, 11, 11)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(HireDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -375,7 +375,7 @@ public class InternalEmployeeView extends javax.swing.JInternalFrame {
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comboDepartmentId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tombolSimpanTambah)
                     .addComponent(tombolHapus)
